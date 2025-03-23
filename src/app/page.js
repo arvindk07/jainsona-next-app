@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useEffect } from "react";
 import HeroSection from "@/component/home/herosection";
@@ -12,11 +12,11 @@ import AboutUs from "@/component/home/About";
 import Header from "@/component/header/header";
 import Footer from "@/component/footer/footer";
 
-import Head from 'next/head';
+import Head from "next/head";
+import AppHero from "@/component/home/AppHero";
 
 const ScrollToTop = () => {
   useEffect(() => {
-
     window.scrollTo(0, 0);
   }, []);
 
@@ -37,6 +37,7 @@ const Home = () => {
       </Head>
       <ScrollToTop />
       <Header />
+      <AppHero />
       <HeroSection />
       <AboutUs />
       <Products />
@@ -47,7 +48,8 @@ const Home = () => {
       <section className=" text-black py-10 px-6 flex flex-col items-center text-center">
         <h2 className="text-2xl font-bold mb-4">Employment</h2>
         <p className="text-lg max-w-2xl">
-          To apply for a job with Jainsons, please send a cover letter together with your C.V.
+          To apply for a job with Jainsons, please send a cover letter together
+          with your C.V.
         </p>
         <a
           href="mailto:web@jainsonsindia.net"

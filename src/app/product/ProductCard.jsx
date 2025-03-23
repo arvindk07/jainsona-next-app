@@ -1,98 +1,106 @@
-import React, { useState } from 'react';
-import Slider from 'react-slick';
-import ProductModal from './product-view';
-import Modal from '../../component/form/modal';
-import Quote from '../../component/form/quote';
+"use client";
 
-const ProductCard = ({ images, name, feature }) => {
-	const [isOpen, setIsOpen] = useState(false);
-	const [quoteModal, setQuoteModal] = useState(false);
-	const sliderSettings = {
-		dots: true,
-		infinite: true,
-		speed: 500,
-		slidesToShow: 1,
-		slidesToScroll: 1,
-	};
+import React, { useState, useEffect } from "react";
+import Slider from "react-slick";
+import ProductModal from "./product-view";
+import Modal from "../../component/form/modal";
+import Quote from "../../component/form/quote";
+// import { useRouter } from "next/router";
 
-	return (
-		<>
-			<div className="border rounded-lg shadow-md overflow-hidden">
-				{/* Image Slider */}
+const ProductCard = ({ images, name, feature, id }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [quoteModal, setQuoteModal] = useState(false);
+  const [router, setRouter] = useState(null);
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
 
-				{images?.length > 0 ? (
-					<Slider {...sliderSettings}>
-						{images?.map((img, index) => (
-							<div key={index} onClick={() => setIsOpen(true)}>
-								<img
-									src={
-										img.url ||
-										'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png'
-									}
-									alt={`Product ${index + 1}`}
-									className="w-full h-48 object-cover "
-								/>
-							</div>
-						))}
-					</Slider>
-				) : (
-					<div key={0} onClick={() => setIsOpen(true)}>
-						<img
-							src={
-								'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png'
-							}
-							alt={`Product`}
-							className="w-full h-48 object-cover"
-						/>
-					</div>
-				)}
+  //   useEffect(() => {
+  //     if (typeof window !== "undefined") {
+  //       setRouter(require("next/router").useRouter());
+  //     }
+  //   }, []);
 
-				{/* Product Info */}
-				<div className="p-6 text-center">
-					<h3 className="text-lg font-semibold">{name}</h3>
+  return (
+    <>
+      <div className="border rounded-lg shadow-md overflow-hidden">
+        {/* Image Slider */}
 
-					{/* Product Features */}
-					<ul className="mt-2">
-						{feature
-							?.filter(
-								(data) =>
-									data.key !== 'Stock Movement' &&
-									data.key !== 'Description' &&
-									data,
-							)
-							?.map((feature, index) => (
-								<li
-									key={index}
-									className="text-sm text-gray-600"
-								>
-									{feature.key}: {feature.value}
-								</li>
-							))}
-					</ul>
+        {images?.length > 0 ? (
+          <Slider {...sliderSettings}>
+            {images?.map((img, index) => (
+              <div key={index} onClick={() => setIsOpen(true)}>
+                <img
+                  src={
+                    img.url ||
+                    "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
+                  }
+                  alt={`Product ${index + 1}`}
+                  className="w-full h-48 object-cover "
+                />
+              </div>
+            ))}
+          </Slider>
+        ) : (
+          <div key={0} onClick={() => setIsOpen(true)}>
+            <img
+              src={
+                "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
+              }
+              alt={`Product`}
+              className="w-full h-48 object-cover"
+            />
+          </div>
+        )}
 
-					<button
-						className="mt-4 bg-[#880909] rounded-full text-white px-4 py-2 hover:bg-red-700"
-						onClick={() => setQuoteModal(true)}
-					>
-						Get Best Quote
-					</button>
-				</div>
-			</div>
+        {/* Product Info */}
+        <div className="p-6 text-center">
+          <h3 className="text-lg font-semibold">{name}</h3>
 
-			{/* Product Modal */}
-			<ProductModal
-				isOpen={isOpen}
-				setIsOpen={setIsOpen}
-				images={images}
-				name={name}
-				feature={feature}
-				setQuoteModal={setQuoteModal}
-			/>
-			<Modal isOpen={quoteModal} setIsOpen={setQuoteModal}>
-				<Quote />
-			</Modal>
-		</>
-	);
+          {/* Product Features */}
+          <ul className="mt-2">
+            {feature
+              ?.filter(
+                (data) =>
+                  data.key !== "Stock Movement" &&
+                  data.key !== "Description" &&
+                  data
+              )
+              ?.map((feature, index) => (
+                <li key={index} className="text-sm text-gray-600">
+                  {feature.key}: {feature.value}
+                </li>
+              ))}
+          </ul>
+
+          <button
+            className="mt-4 bg-[#880909] rounded-full text-white px-4 py-2 hover:bg-red-700"
+            onClick={() => setQuoteModal(true)}
+            // onClick={() => router.push(`/product/${id}`)}
+          >
+            Get Best Quote
+          </button>
+        </div>
+      </div>
+
+      {/* Product Modal */}
+      <ProductModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        images={images}
+        name={name}
+        feature={feature}
+        setQuoteModal={setQuoteModal}
+      />
+      <Modal isOpen={quoteModal} setIsOpen={setQuoteModal}>
+        <Quote />
+      </Modal>
+    </>
+  );
 };
 
 export default ProductCard;

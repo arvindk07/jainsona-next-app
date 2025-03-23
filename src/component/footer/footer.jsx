@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import Link from 'next/link';
-import { useState } from 'react';
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
 
 const Footer = () => {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
 
   const handleSubscribe = () => {
     // Handle subscription logic here
@@ -17,8 +17,14 @@ const Footer = () => {
       <div className="max-w-screen-xl mx-auto px-6 py-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
-            <div className='mb-4 bg-white max-w-max p-2'>
-              <Image src="/logo.png" alt="Jain Sons Logo" width={100} height={50} className="h-12" />
+            <div className="mb-4  max-w-max p-2">
+              <Image
+                src="/jainsons-red-white-logo.png"
+                alt="Jain Sons Logo"
+                width={100}
+                height={50}
+                className="h-12"
+              />
             </div>
             <ul className="space-y-2">
               <li className="flex items-center space-x-2">
@@ -31,7 +37,10 @@ const Footer = () => {
               </li>
               <li className="flex items-start space-x-2">
                 <span>📍</span>
-                <span>Corporate Office: C-5, Community Center, Naraina Vihar, New Delhi 110028 (India)</span>
+                <span>
+                  Corporate Office: C-5, Community Center, Naraina Vihar, New
+                  Delhi 110028 (India)
+                </span>
               </li>
             </ul>
           </div>
@@ -46,7 +55,10 @@ const Footer = () => {
                 className="p-2 w-full rounded-l-lg border-0 focus:ring-2 text-black focus:ring-red-400"
                 placeholder="Enter Your Email"
               />
-              <button onClick={handleSubscribe} className="bg-gray-800 text-white px-4 rounded-r-lg hover:bg-black">
+              <button
+                onClick={handleSubscribe}
+                className="bg-gray-800 text-white px-4 rounded-r-lg hover:bg-black"
+              >
                 Subscribe
               </button>
             </div>
@@ -87,8 +99,10 @@ const Footer = () => {
           </ul>
         </div>
       </div>
-      <div className='bg-[#880909] w-full py-3'>
-        <p className="text-center text-sm">© Jain Sons India - All Rights Reserved.</p>
+      <div className="bg-[#880909] w-full py-3">
+        <p className="text-center text-sm">
+          © Jain Sons India - All Rights Reserved.
+        </p>
       </div>
     </footer>
   );
