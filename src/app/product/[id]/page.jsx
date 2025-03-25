@@ -1,15 +1,15 @@
 "use client";
 
-import ProductCard from "./ProductCard";
 import { useFormik } from "formik";
 import axios from "axios";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { useState, useEffect } from "react";
-import Quote from "../../component/form/quote";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "@/component/header/header";
 import Footer from "@/component/footer/footer";
+import Quote from "@/component/form/quote";
+import { useParams } from "next/navigation";
 
 const Loader = () => {
   return (
@@ -19,92 +19,12 @@ const Loader = () => {
   );
 };
 
-const ProductAndService = () => {
-  const [categories, setCategories] = useState([]);
+const ProductDetails = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [isSelected, setIsSelected] = useState(null);
-  const getAllCategory = async () => {
-    try {
-      const response = await axios.get(
-        "https://api.jainsonsindiaonline.com/api/categories/showAll"
-      );
-      if (response.data) {
-        const sortedCategory = response.data.data
-          .map((category) => ({
-            ...category,
-            name: category.name.trim(),
-          }))
-          .sort((a, b) => a.name.localeCompare(b.name));
-        setCategories(sortedCategory);
-      } else {
-      }
-    } catch (error) {
-      // setErrorMsg("Error logging in. Please check your credentials.");
-    } finally {
-      // setLoading(false);
-    }
-  };
+  const params = useParams();
+  const { id } = params;
 
-  const fetchProducts = async (category) => {
-    const url = new URL(
-      "https://api.jainsonsindiaonline.com/api/product/search"
-    );
-    setIsLoading(true);
-    url.searchParams.append("category", category);
-    try {
-      const response = await axios.get(url);
-
-      if (response.data && response.data.data) {
-        setProducts(response.data.data);
-        setIsLoading(false);
-      } else {
-        throw new Error("No product data found!");
-      }
-    } catch (err) {
-      setError(
-        err.response?.data?.message || err.message || "An error occurred"
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get(
-          "https://api.jainsonsindiaonline.com/api/product/getAll"
-        );
-
-        if (response.data && response.data.data) {
-          setProducts(response.data.data);
-        } else {
-          throw new Error("No product data found!");
-        }
-      } catch (err) {
-        setError(
-          err.response?.data?.message || err.message || "An error occurred"
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-    getAllCategory();
-  }, []); // Empty dependency array ensures this runs only once
-
-  const [products, setProducts] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [showAll, setShowAll] = useState(false); // State to toggle between show all or first 5 items
-  const [recentProduct, setrecentProduct] = useState(false); // State to toggle between show all or first 5 items
-  const [likeProduct, setLikeProduct] = useState(false);
-  const toggleShowAll = () => {
-    setShowAll((prevState) => !prevState);
-  };
+  console.log("productId==>", id);
 
   const formik = useFormik({
     initialValues: {
@@ -165,26 +85,10 @@ const ProductAndService = () => {
     },
   });
 
-  const displayedData = showAll ? products : products.slice(0, 6);
-
   const scrollToSection = () => {
-    const section = document.getElementById("next-section"); // Get the target section by id
-    section.scrollIntoView({ behavior: "smooth" }); // Scroll smoothly to the section
+    const section = document.getElementById("next-section");
+    section.scrollIntoView({ behavior: "smooth" });
   };
-  const displayedRecentProducts = recentProduct
-    ? products.reverse()
-    : products?.slice(-3).reverse();
-  const displayedLikeProducts = likeProduct
-    ? products.reverse()
-    : products?.slice(-3).reverse();
-
-  const filteredProducts = searchQuery
-    ? products.filter((product) =>
-        product.name.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : displayedData;
-
-  console.log("products==>", products);
 
   return (
     <div>
@@ -203,87 +107,10 @@ const ProductAndService = () => {
         </div>
       </div>
 
-      <div className=" container mx-auto">
-        <h3 className="text-xl font-bold px-6 mt-12 mb-6 ">Category</h3>
-
-        <div className="flex flex-wrap gap-4 px-6 ">
-          {categories?.map((data, index) => (
-            <button
-              className={`${
-                data?._id === isSelected ? "bg-[#880909]" : "bg-[#EBEBEB]"
-              } : 
-                }] hover:bg-[#880909] ${
-                  data?._id === isSelected ? "text-[#fff]" : "text-black"
-                } hover:text-white  py-2 px-4 rounded-full transition duration-300 ease-in-out`}
-              onClick={() => {
-                fetchProducts(data?._id);
-                setIsSelected(data?._id);
-              }}
-              key={index}
-            >
-              {data?.name}
-            </button>
-          ))}
-        </div>
+      <div id="next-section">
+        <Quote id={id} />
       </div>
 
-      <div className="py-12">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-center w-full max-w-md mb-6 pl-4 ">
-            <input
-              type="text"
-              placeholder="Search Products..."
-              className="w-full px-4 py-2 text-gray-700 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 placeholder-gray-400"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-          <h2 className="text-2xl font-bold mb-6 pl-4">Our Products</h2>
-          {!loading && (
-            <>
-              {filteredProducts.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
-                  {filteredProducts.map((product, index) => (
-                    <ProductCard
-                      key={index}
-                      images={product.imageURLs}
-                      name={product.name}
-                      feature={product.features}
-                      id={product._id}
-                      category={product.category}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <p className="text-center text-gray-500 text-lg mt-4">
-                  No Products Found
-                </p>
-              )}
-            </>
-          )}
-
-          {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4 ">
-            {displayedData?.map((product, index) => (
-              <ProductCard
-                key={index}
-                images={product.imageURLs}
-                name={product.name}
-                feature={product.features}
-              />
-            ))}
-          </div> */}
-          {products?.length > 6 && (
-            <div className=" flex w-full justify-center">
-              <button
-                className="mt-4 bg-[#EDCD1F] text-black font-bold rounded-full px-6 py-2 transition-all hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                onClick={toggleShowAll}
-              >
-                {showAll ? "See Less" : "See All"}
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
       <div className="container mx-auto px-4  pb-12">
         <div className="relative pt-7 rounded-lg bg-[to-100%,to-100%] bg-cover bg-bottom bg-no-repeat bg-[url('/product-bottom-banner.png')]  h-[400px] flex flex-col md:flex-row items-center justify-center text-center">
           <div className=" w-full md:w-1/2  text-center md:text-center">
@@ -313,65 +140,7 @@ const ProductAndService = () => {
           </div>
         </div>
       </div>
-      <div id="next-section">
-        <Quote />
-      </div>
-      <div className="py-12">
-        <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-bold mb-6 pl-4">
-            Recently viewed products
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4 ">
-            {displayedRecentProducts?.map((product, index) => (
-              <ProductCard
-                key={index}
-                images={product.imageURLs}
-                name={product.name}
-                feature={product.features}
-              />
-            ))}
-          </div>
-        </div>
 
-        {products?.length > 3 && (
-          <div className=" flex w-full justify-center">
-            <button
-              className="mt-4 bg-[#EDCD1F] text-black font-bold rounded-full px-6 py-2 transition-all hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-              onClick={() => setrecentProduct(!recentProduct)}
-            >
-              {recentProduct ? "See Less" : "See All"}
-            </button>
-          </div>
-        )}
-      </div>
-
-      <div className="py-12">
-        <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-bold mb-6 pl-4">
-            Products you may like
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4 ">
-            {displayedLikeProducts?.map((product, index) => (
-              <ProductCard
-                images={product.imageURLs}
-                name={product.name}
-                key={index}
-                feature={product.features}
-              />
-            ))}
-          </div>
-        </div>
-        {products?.length > 3 && (
-          <div className=" flex w-full justify-center">
-            <button
-              className="mt-4 bg-[#EDCD1F] text-black font-bold rounded-full px-6 py-2 transition-all hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-              onClick={() => setLikeProduct(!likeProduct)}
-            >
-              {likeProduct ? "See Less" : "See All"}
-            </button>
-          </div>
-        )}
-      </div>
       <div className="min-h-screen flex justify-center items-center bg-white">
         <div className="w-full  grid grid-cols-1 md:grid-cols-2 gap-8  rounded-lg p-6">
           {/* Left Side */}
@@ -528,4 +297,4 @@ const ProductAndService = () => {
   );
 };
 
-export default ProductAndService;
+export default ProductDetails;

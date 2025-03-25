@@ -5,12 +5,13 @@ import Slider from "react-slick";
 import ProductModal from "./product-view";
 import Modal from "../../component/form/modal";
 import Quote from "../../component/form/quote";
-// import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
-const ProductCard = ({ images, name, feature, id }) => {
+const ProductCard = ({ images, name, feature, id, category }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [quoteModal, setQuoteModal] = useState(false);
-  const [router, setRouter] = useState(null);
+  const router = useRouter();
+
   const sliderSettings = {
     dots: true,
     infinite: true,
@@ -18,12 +19,6 @@ const ProductCard = ({ images, name, feature, id }) => {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
-
-  //   useEffect(() => {
-  //     if (typeof window !== "undefined") {
-  //       setRouter(require("next/router").useRouter());
-  //     }
-  //   }, []);
 
   return (
     <>
@@ -79,8 +74,8 @@ const ProductCard = ({ images, name, feature, id }) => {
 
           <button
             className="mt-4 bg-[#880909] rounded-full text-white px-4 py-2 hover:bg-red-700"
-            onClick={() => setQuoteModal(true)}
-            // onClick={() => router.push(`/product/${id}`)}
+            // onClick={() => setQuoteModal(true)}
+            onClick={() => router.push(`/product/${category}`)}
           >
             Get Best Quote
           </button>

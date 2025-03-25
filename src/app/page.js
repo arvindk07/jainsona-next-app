@@ -37,8 +37,9 @@ const Home = () => {
       </Head>
       <ScrollToTop />
       <Header />
+
       <AppHero />
-      <HeroSection />
+      {/* <HeroSection /> */}
       <AboutUs />
       <Products />
       <Stats />
