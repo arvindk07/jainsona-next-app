@@ -4,12 +4,13 @@ import { useFormik } from "formik";
 import axios from "axios";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "@/component/header/header";
 import Footer from "@/component/footer/footer";
 import Quote from "@/component/form/quote";
 import { useParams } from "next/navigation";
+import Slider from "react-slick";
 
 const Loader = () => {
   return (
@@ -21,10 +22,70 @@ const Loader = () => {
 
 const ProductDetails = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [productDetails, setProductDetails] = useState(null);
+
+  const mainSliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: true,
+    fade: true,
+    infinite: true,
+  };
+
+  const thumbnailSliderSettings = {
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    focusOnSelect: true,
+    vertical: true,
+    verticalSwiping: true,
+    arrows: false,
+    speed: 500,
+  };
+
+  const mainSliderRef = useRef(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  console.log("productDetails==>", productDetails?.imageURLs);
+
   const params = useParams();
   const { id } = params;
 
-  console.log("productId==>", id);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          "https://api.jainsonsindiaonline.com/api/product/getAll"
+        );
+
+        if (response.data && response.data.data) {
+          const filteredProduct = response.data.data.find(
+            (item) => item._id === id
+          );
+
+          if (filteredProduct) {
+            setProductDetails(filteredProduct);
+          } else {
+            throw new Error("Product not found!");
+          }
+        } else {
+          throw new Error("No product data found!");
+        }
+      } catch (err) {
+        console.error("Error fetching product:", err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchProducts();
+    }
+  }, [id]);
 
   const formik = useFormik({
     initialValues: {
@@ -106,10 +167,100 @@ const ProductDetails = () => {
           </p>
         </div>
       </div>
+      {loading ? (
+        <Loader />
+      ) : productDetails ? (
+        <>
+          <div className="flex flex-col md:flex-row gap-8 px-4 pt-10">
+            {/* Left Section - Vertical Thumbnails */}
+            <div className="flex flex-col md:flex-row gap-4 w-full md:w-1/2">
+              <div className="w-1/4">
+                <Slider {...thumbnailSliderSettings} className="h-full">
+                  {productDetails?.imageURLs?.map((img, index) => (
+                    <div key={index} className="p-2">
+                      <img
+                        src={
+                          img.url ||
+                          "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
+                        }
+                        alt={`Thumbnail ${index + 1}`}
+                        className="w-24 h-24 object-cover rounded-lg border cursor-pointer"
+                        onClick={() => handleThumbnailClick(index)}
+                      />
+                    </div>
+                  ))}
+                </Slider>
+              </div>
 
-      <div id="next-section">
-        <Quote id={id} />
-      </div>
+              <div className="w-3/4">
+                <Slider
+                  {...mainSliderSettings}
+                  ref={mainSliderRef}
+                  afterChange={(index) => setActiveIndex(index)}
+                >
+                  {productDetails?.imageURLs?.map((img, index) => (
+                    <div key={index} className="flex justify-center">
+                      <img
+                        src={
+                          img.url ||
+                          "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
+                        }
+                        alt={`Slide ${index + 1}`}
+                        className="w-full h-auto rounded-lg"
+                      />
+                    </div>
+                  ))}
+                </Slider>
+              </div>
+            </div>
+
+            {/* Right Section - Product Details */}
+            <div className="w-full md:w-1/2">
+              <h3 className="text-2xl font-bold text-gray-900">
+                {productDetails?.name}
+              </h3>
+              <p className="text-gray-600 mt-4 leading-relaxed">
+                {
+                  productDetails?.features?.find(
+                    (data) => data.key === "Description"
+                  )?.value
+                }
+              </p>
+              {/* Product Features */}
+              <div className="mt-6">
+                <h3 className="text-lg font-bold text-red-700">Features</h3>
+                <ul className=" mt-2 text-gray-700 space-y-1">
+                  {productDetails?.features
+                    ?.filter(
+                      (data) =>
+                        data.key !== "Stock Movement" &&
+                        data.key !== "Description" &&
+                        data
+                    )
+                    ?.map((feature, index) => (
+                      <>
+                        {
+                          <li key={index} className="text-sm text-gray-600">
+                            <span className="font-semibold">{feature.key}</span>
+                            :<span> {feature.value}</span>
+                          </li>
+                        }
+                      </>
+                    ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div id="next-section">
+            <Quote id={productDetails?._id} />
+          </div>
+        </>
+      ) : (
+        <div className="text-center text-gray-600 text-lg py-10">
+          No data found
+        </div>
+      )}
 
       <div className="container mx-auto px-4  pb-12">
         <div className="relative pt-7 rounded-lg bg-[to-100%,to-100%] bg-cover bg-bottom bg-no-repeat bg-[url('/product-bottom-banner.png')]  h-[400px] flex flex-col md:flex-row items-center justify-center text-center">
@@ -153,7 +304,7 @@ const ProductDetails = () => {
               New Delhi-110028 (India)
             </p>
             <p className="text-gray-700 font-medium text-left">
-              sales@jainsonsindia.net
+              sales@jainsonsindiaonline.com
             </p>
           </div>
 

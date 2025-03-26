@@ -122,16 +122,7 @@ const ContactUs = () => {
             C-5, Community Center, Naraina Vihar, New Delhi 110028 (India)
           </p>
           {/* Keep in a single row on mobile and desktop */}
-          <div className="flex flex-wrap float-start items-center gap-4 mb-4 w-full">
-            <div className="flex items-center gap-2">
-              <span className="text-red-600 text-xl">📞</span>
-              <span>8447012326, 9873664653</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-red-600 text-xl">✉️</span>
-              <span>sales@jainsonsindia.net</span>
-            </div>
-          </div>
+
           <div className="flex flex-wrap float-start items-center gap-4 mb-4 w-full">
             <div className="flex items-center gap-2">
               <span className="text-red-600 text-xl">📞</span>

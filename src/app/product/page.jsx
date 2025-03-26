@@ -23,6 +23,8 @@ const ProductAndService = () => {
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSelected, setIsSelected] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   const getAllCategory = async () => {
     try {
       const response = await axios.get(
@@ -69,6 +71,26 @@ const ProductAndService = () => {
     }
   };
 
+  const fetchAllProducts = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(
+        "https://api.jainsonsindiaonline.com/api/product/getAll"
+      );
+      if (response.data && response.data.data) {
+        setProducts(response.data.data);
+      } else {
+        throw new Error("No product data found!");
+      }
+    } catch (err) {
+      setError(
+        err.response?.data?.message || err.message || "An error occurred"
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -97,7 +119,6 @@ const ProductAndService = () => {
   const [products, setProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [showAll, setShowAll] = useState(false); // State to toggle between show all or first 5 items
   const [recentProduct, setrecentProduct] = useState(false); // State to toggle between show all or first 5 items
@@ -215,9 +236,18 @@ const ProductAndService = () => {
                 }] hover:bg-[#880909] ${
                   data?._id === isSelected ? "text-[#fff]" : "text-black"
                 } hover:text-white  py-2 px-4 rounded-full transition duration-300 ease-in-out`}
+              // onClick={() => {
+              //   fetchProducts(data?._id);
+              //   setIsSelected(data?._id);
+              // }}
               onClick={() => {
-                fetchProducts(data?._id);
-                setIsSelected(data?._id);
+                if (isSelected === data?._id) {
+                  setIsSelected(null);
+                  fetchAllProducts();
+                } else {
+                  fetchProducts(data?._id);
+                  setIsSelected(data?._id);
+                }
               }}
               key={index}
             >
@@ -239,7 +269,7 @@ const ProductAndService = () => {
             />
           </div>
           <h2 className="text-2xl font-bold mb-6 pl-4">Our Products</h2>
-          {!loading && (
+          {!loading ? (
             <>
               {filteredProducts.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
@@ -260,6 +290,10 @@ const ProductAndService = () => {
                 </p>
               )}
             </>
+          ) : (
+            <div className="flex justify-center items-center py-12">
+              <div className="w-16 h-16 border-4 border-t-transparent border-gray-600 border-solid rounded-full animate-spin"></div>
+            </div>
           )}
 
           {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4 ">
@@ -384,7 +418,7 @@ const ProductAndService = () => {
               New Delhi-110028 (India)
             </p>
             <p className="text-gray-700 font-medium text-left">
-              sales@jainsonsindia.net
+              sales@jainsonsindiaonline.com
             </p>
           </div>
 

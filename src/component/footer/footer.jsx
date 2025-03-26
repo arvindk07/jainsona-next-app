@@ -29,11 +29,11 @@ const Footer = () => {
             <ul className="space-y-2">
               <li className="flex items-center space-x-2">
                 <span>📞</span>
-                <span>8447012326, 9873664653</span>
+                <span>9599203236</span>
               </li>
               <li className="flex items-center space-x-2">
                 <span>📧</span>
-                <span>sales@jainsonsindia.net</span>
+                <span>sales@jainsonsindiaonline.com</span>
               </li>
               <li className="flex items-start space-x-2">
                 <span>📍</span>

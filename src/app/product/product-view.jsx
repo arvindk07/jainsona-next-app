@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from "react";
 import Slider from "react-slick";
 
@@ -39,6 +38,8 @@ const ProductModal = ({
     setActiveIndex(index);
     mainSliderRef.current?.slickGoTo(index);
   };
+
+  console.log("images==>", images);
 
   return (
     <>
@@ -109,27 +110,31 @@ const ProductModal = ({
 
                 <h3 className="text-2xl font-bold text-gray-900">{name}</h3>
                 <p className="text-gray-600 mt-4 leading-relaxed">
-                  {
-                    feature?.find((data) => data.key === "Description")?.value
-                  }
-                 
+                  {feature?.find((data) => data.key === "Description")?.value}
                 </p>
                 {/* Product Features */}
                 <div className="mt-6">
                   <h3 className="text-lg font-bold text-red-700">Features</h3>
                   <ul className=" mt-2 text-gray-700 space-y-1">
-                    {feature?.filter((data) => (data.key !== "Stock Movement" && data.key !== "Description") && data)?.map((feature, index) => (
-                      <>
-                        {
-                           <li key={index} className="text-sm text-gray-600">
-                            <span className="font-semibold">{feature.key}</span>:
-                            <span> {feature.value}</span> 
-                          </li>
-                        }
-
-
-                      </>
-                    ))}
+                    {feature
+                      ?.filter(
+                        (data) =>
+                          data.key !== "Stock Movement" &&
+                          data.key !== "Description" &&
+                          data
+                      )
+                      ?.map((feature, index) => (
+                        <>
+                          {
+                            <li key={index} className="text-sm text-gray-600">
+                              <span className="font-semibold">
+                                {feature.key}
+                              </span>
+                              :<span> {feature.value}</span>
+                            </li>
+                          }
+                        </>
+                      ))}
                   </ul>
                 </div>
                 {/* <div className="mt-6">

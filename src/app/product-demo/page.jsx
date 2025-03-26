@@ -135,7 +135,7 @@ const ProductDemoPage = () => {
       </div>
 
       {/* Workstation Essentials Section */}
-      <div className="bg-[url('/wse2.png')]  bg-bottom bg-no-repeat bg-cover md:bg-contain min-h-[500px]  py-16 px-4 text-center">
+      {/* <div className="bg-[url('/wse4.png')]  bg-bottom bg-no-repeat bg-cover md:bg-contain min-h-[500px]  py-16 px-4 text-center">
         <div className="container mx-auto">
           <h2 className="text-3xl font-semibold text-red-600 mb-4">
             Wireless & Wired
@@ -147,6 +147,30 @@ const ProductDemoPage = () => {
             </button>
           </Link>
         </div>
+      </div> */}
+
+      <div className="min-h-[420px] bg-[#f0eaea] rounded-2xl relative mt-10 overflow-hidden">
+        <img
+          src="/wse4.png"
+          alt=""
+          className=" absolute w-full h-auto bottom-[-10px] z-10"
+        />
+        <div className="relative z-20 flex flex-col items-center mt-16">
+          <h2 className="text-3xl  font-semibold text-red-600 mb-4 ">
+            Wireless & Wired
+          </h2>
+          <p className="text-4xl font-bold mb-8">Workstation Essentials</p>
+          <Link href={"/product"}>
+            <button className="bg-[#880909] text-white py-3 px-6 rounded-[40px] hover:bg-red-700 transition-colors">
+              Know more
+            </button>
+          </Link>
+        </div>
+        {/* <img
+            src="/wse4.png"
+            alt=""
+            className=" absolute w-full h-auto bottom-[-10px]"
+          /> */}
       </div>
 
       {/* Quote Form */}

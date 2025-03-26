@@ -75,7 +75,7 @@ const ProductCard = ({ images, name, feature, id, category }) => {
           <button
             className="mt-4 bg-[#880909] rounded-full text-white px-4 py-2 hover:bg-red-700"
             // onClick={() => setQuoteModal(true)}
-            onClick={() => router.push(`/product/${category}`)}
+            onClick={() => router.push(`/product/${id}`)}
           >
             Get Best Quote
           </button>
