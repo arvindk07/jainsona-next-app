@@ -34,6 +34,7 @@ const Home = () => {
           integrity="sha384-XdS9HDbvxEsGdX90DQ6wsFXsmRbjZ0SwbM3Se1jpAzslU3H/6p2VdpWnCwAfcvQU"
           crossOrigin="anonymous"
         />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
       <ScrollToTop />
       <Header />

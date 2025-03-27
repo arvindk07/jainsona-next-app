@@ -171,10 +171,10 @@ const ProductDetails = () => {
         <Loader />
       ) : productDetails ? (
         <>
-          <div className="flex flex-col md:flex-row gap-8 px-4 pt-10">
+          <div className="flex flex-col md:flex-row gap-8 md:px-8 lg:px-16  pt-10">
             {/* Left Section - Vertical Thumbnails */}
-            <div className="flex flex-col md:flex-row gap-4 w-full md:w-1/2">
-              <div className="w-1/4">
+            <div className="flex flex-col md:flex-row gap-4 w-full md:w-2/5 bg-gray-200 pr-12 py-10  p-8 shadow-lg border rounded-lg">
+              <div className="w-1/4 ">
                 <Slider {...thumbnailSliderSettings} className="h-full">
                   {productDetails?.imageURLs?.map((img, index) => (
                     <div key={index} className="p-2">
@@ -215,7 +215,7 @@ const ProductDetails = () => {
             </div>
 
             {/* Right Section - Product Details */}
-            <div className="w-full md:w-1/2">
+            <div className="w-full md:w-2/5">
               <h3 className="text-2xl font-bold text-gray-900">
                 {productDetails?.name}
               </h3>
